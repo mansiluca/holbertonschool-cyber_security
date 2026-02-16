@@ -1,0 +1,7 @@
+GET /support/ticket?id=1 HTTP/1.1
+Host: web0x00.hbtn
+User-Agent: Mozilla/5.0
+Accept: text/html,application/xhtml+xml
+Accept-Language: en-US,en;q=0.9
+Cookie: session=.eJxFyjsKgDAQBcC7vDpIbFMpHsETJLhiID92E1TEu2sjtsNcGJfok8CsNggpTE1qjsSvVG4vzK2UzPUfFK0PMDizsB92cvrQuttcTVDwC0yv0IQ42Uhfw_0AkYMj6g.aY8rRQ.QPuQJ9XX75kGXgM4b7XEReZH1Qw
+Connection: close
