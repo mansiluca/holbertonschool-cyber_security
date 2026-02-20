@@ -1,16 +1,9 @@
 #!/bin/bash
-
 password="$1"
-
 password="${password#'{xor}'}"
-
-decoded_password=$(echo -n "$password" | openssl enc -base64 -d)
-
-output=""
-
-for ((i = 0; i < ${#decoded_password}; i++)); do
-    char="${decoded_password:$i:1}"
-    xor_result=$(( $(printf "%d" "'$char") ^ 95 ))
-    output+=$(printf "\\$(printf '%03o' $xor_result)")
+echo -n "$password" | base64 -D | od -t u1 -An | while read -r line; do
+    for byte in $line; do
+        printf "\\$(printf '%03o' "$((byte ^ 95))")"
+    done
 done
-echo "$output"
+echo ""
