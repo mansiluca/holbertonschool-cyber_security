@@ -48,13 +48,11 @@ def read_write_heap(pid, search_string, replace_string):
         return False
 
     heap_start, heap_end = heap
-    #print("Heap found at [{:x}-{:x}]".format(heap_start, heap_end))
 
     search_bytes = search_string.encode("ascii")
     replace_bytes = replace_string.encode("ascii")
 
     if len(replace_bytes) > len(search_bytes):
-        #print("Replace string is longer than search string")
         return False
 
     # Pad with null bytes so the original C string remains cleanly terminated.
@@ -68,14 +66,10 @@ def read_write_heap(pid, search_string, replace_string):
         try:
             offset = heap_data.index(search_bytes)
         except ValueError:
-            #print("'{}' not found in heap".format(search_string))
             return False
-
-        #print("Found '{}' at offset {:x}".format(search_string, offset))
 
         mem_file.seek(heap_start + offset)
         mem_file.write(replace_bytes)
-        #print("Replaced '{}' with '{}'".format(search_string, replace_string))
         return True
 
 

@@ -3,3 +3,4 @@ linux_security/.DS_Store
 .DS_Store
 network_security/.DS_Store
 web_application_security/.DS_Store
+linux_security/0x04_buffer_overflow/read_write_heap.py
