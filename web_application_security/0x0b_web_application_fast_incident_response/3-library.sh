@@ -19,6 +19,6 @@ if [ -z "$ATTACKER" ]; then
     exit 1
 fi
 
-grep -F "^$ATTACKER " "$LOG_FILE" | awk -F'"' '{
-    print $NF
+grep "^${ATTACKER} " "$LOG_FILE" | awk -F'"' '{
+    print $6
 }' | sort | uniq -c | sort -rn | head -1 | awk '{$1=""; sub(/^ +/, ""); print}'
