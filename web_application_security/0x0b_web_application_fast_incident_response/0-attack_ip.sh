@@ -7,6 +7,11 @@ if [ ! -f "$LOG_FILE" ]; then
     exit 1
 fi
 
+if [ ! -s "$LOG_FILE" ]; then
+    echo "Error: log file is empty: $LOG_FILE" >&2
+    exit 1
+fi
+
 awk '
 {
     ip = $1
@@ -22,5 +27,4 @@ END {
         }
     }
     print attacker
-}
-' "$LOG_FILE"
+}' "$LOG_FILE"
