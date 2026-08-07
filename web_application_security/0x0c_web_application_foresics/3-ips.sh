@@ -9,15 +9,17 @@ fi
 
 awk '
 /Accepted password/ || /Accepted publickey/ {
-    for (i=1; i<=NF; i++) {
-        if ($i == "from" && (i+1) <= NF) {
+    for (i = 1; i < NF; i++) {
+        if ($i == "from") {
             ip = $(i+1)
+            sub(/:[0-9]+$/, "", ip)
             if (ip ~ /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/)
                 seen[ip] = 1
         }
     }
 }
 END {
+    count = 0
     for (ip in seen) count++
     print count
 }' "$LOG_FILE"

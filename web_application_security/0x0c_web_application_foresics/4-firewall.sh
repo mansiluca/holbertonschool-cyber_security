@@ -7,4 +7,10 @@ if [ ! -f "$LOG_FILE" ]; then
     exit 1
 fi
 
-grep -ciE 'firewall|ufw|iptables|firewalld|added.*rule|block.*ip|deny.*ip|reject.*ip' "$LOG_FILE"
+awk '
+/COMMAND=.*iptables -A/ {
+    count++
+}
+END {
+    print count
+}' "$LOG_FILE"

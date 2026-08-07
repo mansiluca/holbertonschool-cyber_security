@@ -8,23 +8,18 @@ if [ ! -f "$LOG_FILE" ]; then
 fi
 
 awk '
-/New user/ || /new user/ || /useradd/ || /adduser/ {
+/new user: name=/ {
     for (i = 1; i <= NF; i++) {
-        if ($i == "user" || $i == "USER") {
-            username = $(i + 1)
-            gsub(/["'\''<>,]/, "", username)
-            if (username != "" && username !~ /^[0-9]/) {
-                seen[username] = 1
-            }
+        if ($i ~ /^name=/) {
+            sub(/^name=/, "", $i)
+            sub(/,.*$/, "", $i)
+            seen[$i] = 1
         }
     }
 }
 END {
-    first = 1
-    for (u in seen) {
-        if (!first) printf ","
-        printf "%s", u
-        first = 0
-    }
-    print ""
-}' "$LOG_FILE"
+    n = 0
+    for (u in seen) names[++n] = u
+    # simple sort using asort alternative (piped to sort later)
+    for (i = 1; i <= n; i++) print names[i]
+}' "$LOG_FILE" | sort | awk 'BEGIN{first=1} {if(!first) printf ","; printf "%s", $0; first=0} END{print ""}'

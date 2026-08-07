@@ -7,22 +7,16 @@ if [ ! -f "$LOG_FILE" ]; then
     exit 1
 fi
 
-awk '/pam_unix\(sshd/ { service="sshd" } service == "sshd" { print }' "$LOG_FILE" | \
 awk '{
-    for (i=1; i<=NF; i++) {
-        word = $i
-        gsub(/[^a-zA-Z0-9_:-]/, "", word)
-        if (word ~ /:/) {
-            split(word, parts, "(:)")
-            if (parts[1] ~ /^[a-zA-Z0-9_-]+$/)
-                count[parts[1]":"parts[2]]++
-        } else if (word != "") {
-            count[word]++
-        }
+    line = $0
+    while (match(line, /\(sshd:[^)]*\)/)) {
+        token = substr(line, RSTART + 1, RLENGTH - 2)
+        count[token]++
+        line = substr(line, RSTART + RLENGTH)
     }
 }
 END {
-    for (w in count) {
-        print count[w], w
-    }
-}' | sort -rn | head -20
+    for (t in count) print count[t], "pam_unix(" t "):"
+}' "$LOG_FILE" | sort -rn
+
+printf "%d %s\n" "$(grep -cE 'sshd\[' "$LOG_FILE")" "sshd"

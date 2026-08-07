@@ -10,22 +10,30 @@ fi
 
 tail -n "$LINES" "$LOG_FILE" | awk '
 /Failed password/ {
-    for (i=1; i<=NF; i++) {
-        if ($i == "for" && (i+1) <= NF)
+    for (i = 1; i < NF; i++) {
+        if ($i == "for")
             failed[$(i+1)]++
     }
 }
 /Accepted password/ || /Accepted publickey/ {
-    for (i=1; i<=NF; i++) {
-        if ($i == "for" && (i+1) <= NF)
-            accepted[$(i+1)]++
+    for (i = 1; i < NF; i++) {
+        if ($i == "for") {
+            user = $(i+1)
+            accepted[user]++
+            if (failed[user] > 0)
+                suspects[user] = failed[user]
+        }
     }
 }
 END {
-    for (user in failed) {
-        if (user in accepted) {
-            print user
-            next
+    best = ""
+    best_count = 0
+    for (u in suspects) {
+        if (suspects[u] > best_count) {
+            best = u
+            best_count = suspects[u]
         }
     }
-}' | head -1
+    if (best != "")
+        print best
+}'
