@@ -8,7 +8,7 @@ if [ ! -f "$LOG_FILE" ]; then
 fi
 
 awk '
-/Accepted password/ || /Accepted publickey/ {
+/Accepted password for root/ || /Accepted publickey for root/ {
     for (i = 1; i < NF; i++) {
         if ($i == "from") {
             ip = $(i+1)
