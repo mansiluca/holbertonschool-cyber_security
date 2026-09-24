@@ -6,15 +6,18 @@ if ARGV.size != 2
   exit 1
 end
 
-target = ARGV[0]
-dictionary = ARGV[1]
+hashed_password = ARGV[0].downcase
+dictionary_file = ARGV[1]
 
-found = File.foreach(dictionary).map(&:chomp).find do |word|
-  Digest::SHA256.hexdigest(word) == target
+found = false
+
+File.foreach(dictionary_file) do |line|
+  word = line.strip
+  if Digest::SHA256.hexdigest(word) == hashed_password
+    puts "Password found: #{word}"
+    found = true
+    break
+  end
 end
 
-if found
-  puts "Password found: #{found}"
-else
-  puts 'Password not found in dictionary.'
-end
+puts 'Password not found in dictionary.' unless found
