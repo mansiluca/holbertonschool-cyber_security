@@ -13,7 +13,7 @@ end
 
 options = {}
 OptionParser.new do |opts|
-  opts.banner = "Usage: #{File.basename($PROGRAM_NAME)} [options]"
+  opts.banner = 'Usage: cli.rb [options]'
   opts.on('-a', '--add TASK', 'Add a new task') { |task| options[:add] = task }
   opts.on('-l', '--list', 'List all tasks') { options[:list] = true }
   opts.on('-r', '--remove INDEX', Integer, 'Remove a task by index') do |index|
@@ -40,5 +40,6 @@ if options[:remove]
 end
 
 if options[:list]
+  puts 'Tasks:'
   tasks.each_with_index { |task, index| puts "#{index + 1}. #{task}" }
 end

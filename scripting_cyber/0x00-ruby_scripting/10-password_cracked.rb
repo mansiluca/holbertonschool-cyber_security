@@ -2,8 +2,8 @@
 require 'digest'
 
 if ARGV.size != 2
-  puts "Usage: #{File.basename($PROGRAM_NAME)} HASHED_PASSWORD DICTIONARY_FILE"
-  exit
+  puts 'Usage: 10-password_cracked.rb HASHED_PASSWORD DICTIONARY_FILE'
+  exit 1
 end
 
 target = ARGV[0]
